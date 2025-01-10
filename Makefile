@@ -35,6 +35,6 @@ clean:
 
 # Run the interpreter
 run: $(EXEC)
-	./$(EXEC)
+	./${BUILD_DIR}/$(EXEC)
 
 .PHONY: all clean run
