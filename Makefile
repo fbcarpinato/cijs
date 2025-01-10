@@ -11,7 +11,7 @@ BUILD_DIR = build
 EXEC = cijs
 
 # Source files
-SRC_FILES = $(SRC_DIR)/main.c
+SRC_FILES = $(SRC_DIR)/main.c $(SRC_DIR)/tokenizer.c
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
 
 # Default target
