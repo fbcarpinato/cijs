@@ -6,10 +6,24 @@
 
 /**
  * Initializes the tokenizer with the given source code.
+ *
+ * @param tokenizer A pointer to the Tokenizer structure to initialize.
+ * @param source The source code to tokenize. Must not be NULL.
+ * @return A TokenizerError code indicating success or failure.
  */
-void init_tokenizer(Tokenizer *tokenizer, const char *source) {
+TokenizerError init_tokenizer(Tokenizer *tokenizer, const char *source) {
+  if (!tokenizer) {
+    return TOKENIZER_ERR_NULL_PTR;
+  }
+
+  if (!source || source[0] == '\0') {
+    return TOKENIZER_ERR_INVALID_SOURCE;
+  }
+
   tokenizer->source = source;
   tokenizer->position = 0;
+
+  return TOKENIZER_OK;
 }
 
 /**
