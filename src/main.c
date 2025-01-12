@@ -11,16 +11,25 @@ int main(int argc, char **argv) {
 
   if (lexer_err != LEXER_OK) {
     printf("Lexer initialization failed with error code: %d\n", lexer_err);
-    return 1;
+    return EXIT_FAILURE;
   }
 
-  const char *token;
-  while ((token = next_token(lexer.tokenizer)) != NULL) {
-    printf("Token: %s\n", token);
-    free((void *)token);
+  while (1) {
+    LexerToken token = next_lexical_token(&lexer);
+
+    if (token.type == TOKEN_EOF) {
+      printf("End of source reached.\n");
+      break;
+    }
+
+    if (token.type == TOKEN_UNKNOWN) {
+      printf("Unknown token encountered: %s\n", token.value);
+    } else {
+      printf("Token: Type = %d, Value = '%s'\n", token.type, token.value);
+    }
   }
 
   free_lexer(&lexer);
 
-  return 0;
+  return EXIT_SUCCESS;
 }

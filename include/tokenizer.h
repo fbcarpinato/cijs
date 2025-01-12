@@ -1,6 +1,8 @@
 #ifndef CIJS_TOKENIZER_H_
 #define CIJS_TOKENIZER_H_
 
+#define MAX_TOKEN_LENGTH 256
+
 /**
  * @file tokenizer.h
  * @brief Defines the tokenizer for the CIJS JavaScript interpreter.

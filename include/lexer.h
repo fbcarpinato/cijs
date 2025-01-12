@@ -24,7 +24,12 @@
  * operators, and more.
  */
 typedef enum {
-  NUMBER, /**< Numeric constant (e.g., 123, 3.14). */
+  TOKEN_NUMBER, /**< Numeric constant (e.g., 123, 3.14). */
+  TOKEN_LET,    /**< Keyword let. */
+  TOKEN_PLUS,   /**< Symbol "+". */
+  TOKEN_EQUAL,  /**< Symbol "=". */
+  TOKEN_EOF,    /**< Identifies the end of the source code*/
+  TOKEN_UNKNOWN /**< Unrecognized tokens. */
 } TokenType;
 
 typedef enum {
@@ -50,9 +55,9 @@ typedef enum {
  * after use.
  */
 typedef struct {
-  TokenType type; /**< The type of the token. */
-  char *value;    /**< The token's associated string value. */
-} Token;
+  TokenType type;               /**< The type of the token. */
+  char value[MAX_TOKEN_LENGTH]; /**< The token's associated string value. */
+} LexerToken;
 
 /**
  * @struct Lexer
@@ -94,5 +99,19 @@ LexerError init_lexer(Lexer *lexer, const char *source);
  *              If the lexer pointer is NULL, the function does nothing.
  */
 void free_lexer(Lexer *lexer);
+
+/**
+ * Retrieves the next token from the lexer.
+ *
+ * This function uses the tokenizer to fetch raw tokens and determines their
+ * type.
+ *
+ * @param lexer A pointer to the initialized Lexer.
+ * @param token A pointer to a Token structure where the next token will be
+ * stored. The caller is responsible for freeing the token's `value` field.
+ * @return 1 if a token was successfully retrieved, 0 if the end of the source
+ * code is reached.
+ */
+LexerToken next_lexical_token(Lexer *lexer);
 
 #endif // CIJS_LEXER_H_

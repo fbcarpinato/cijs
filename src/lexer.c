@@ -1,4 +1,6 @@
+#include <ctype.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../include/lexer.h"
 
@@ -46,4 +48,52 @@ void free_lexer(Lexer *lexer) {
   if (lexer->tokenizer) {
     free(lexer->tokenizer);
   }
+}
+
+/**
+ * Helper function to classify a token string into a TokenType.
+ */
+static TokenType classify_token(const char *token) {
+  if (!token) {
+    return TOKEN_EOF;
+  }
+
+  if (isdigit(token[0])) {
+    return TOKEN_NUMBER;
+  }
+
+  if (strcmp(token, "let") == 0) {
+    return TOKEN_LET;
+  }
+
+  if (token[0] == '+') {
+    return TOKEN_PLUS;
+  }
+
+  if (token[0] == '=') {
+    return TOKEN_EQUAL;
+  }
+
+  return TOKEN_UNKNOWN;
+}
+
+/**
+ * Retrieves the next token from the lexer.
+ */
+LexerToken next_lexical_token(Lexer *lexer) {
+  LexerToken token = {.type = TOKEN_UNKNOWN, .value = ""};
+
+  const char *value = next_token(lexer->tokenizer);
+  if (!value) {
+    token.type = TOKEN_EOF;
+    return token;
+  }
+
+  token.type = classify_token(value);
+  strncpy(token.value, value, MAX_TOKEN_LENGTH - 1);
+  token.value[MAX_TOKEN_LENGTH - 1] = '\0';
+
+  free((void *)value);
+
+  return token;
 }
