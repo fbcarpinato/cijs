@@ -54,10 +54,6 @@ void free_lexer(Lexer *lexer) {
  * Helper function to classify a token string into a TokenType.
  */
 static TokenType classify_token(const char *token) {
-  if (!token) {
-    return TOKEN_EOF;
-  }
-
   if (isdigit(token[0])) {
     return TOKEN_NUMBER;
   }
