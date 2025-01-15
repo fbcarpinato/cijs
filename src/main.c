@@ -10,7 +10,8 @@ int main(int argc, char **argv) {
   LexerError lexer_err = init_lexer(&lexer, source);
 
   if (lexer_err != LEXER_OK) {
-    printf("Lexer initialization failed with error code: %d\n", lexer_err);
+    fprintf(stderr, "Lexer initialization failed with error code: %d\n",
+            lexer_err);
     return EXIT_FAILURE;
   }
 
@@ -23,7 +24,7 @@ int main(int argc, char **argv) {
     }
 
     if (token.type == TOKEN_UNKNOWN) {
-      printf("Unknown token encountered: %s\n", token.value);
+      fprintf(stderr, "Unknown token encountered: %s\n", token.value);
     } else {
       printf("Token: Type = %d, Value = '%s'\n", token.type, token.value);
     }
