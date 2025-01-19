@@ -29,21 +29,21 @@ static inline char current_tokenizer_char(Tokenizer *tokenizer) {
  *
  * @param tokenizer A pointer to the Tokenizer structure to initialize.
  * @param source The source code to tokenize. Must not be NULL.
- * @return A TokenizerError code indicating success or failure.
+ * @return A TokenizerInitError code indicating success or failure.
  */
-TokenizerError init_tokenizer(Tokenizer *tokenizer, const char *source) {
+TokenizerInitError init_tokenizer(Tokenizer *tokenizer, const char *source) {
   if (!tokenizer) {
-    return TOKENIZER_ERR_NULL_PTR;
+    return TOKENIZER_INIT_ERROR_NULL_PTR;
   }
 
   if (!source || is_eof(source[0])) {
-    return TOKENIZER_ERR_INVALID_SOURCE;
+    return TOKENIZER_INIT_ERROR_INVALID_SOURCE;
   }
 
   tokenizer->source = source;
   tokenizer->position = 0;
 
-  return TOKENIZER_OK;
+  return TOKENIZER_INIT_OK;
 }
 
 /**

@@ -11,12 +11,6 @@
  * tokenizing JavaScript source code into meaningful tokens.
  */
 
-typedef enum {
-  TOKENIZER_OK,                /**< Initialization successful */
-  TOKENIZER_ERR_NULL_PTR,      /**< NULL pointer passed to the function */
-  TOKENIZER_ERR_INVALID_SOURCE /**< Invalid or empty source string */
-} TokenizerError;
-
 /**
  * @struct Tokenizer
  * @brief Represents the state of the tokenizer as it processes source code.
@@ -25,6 +19,17 @@ typedef struct {
   const char *source;
   int position;
 } Tokenizer;
+
+/**
+ * @brief Enum representing possible errors during tokenizer initialization.
+ */
+typedef enum {
+  TOKENIZER_INIT_OK = 0,         /**< Initialization successful. */
+  TOKENIZER_INIT_ERROR_NULL_PTR, /**< A NULL pointer was passed to the function.
+                                  */
+  TOKENIZER_INIT_ERROR_INVALID_SOURCE /**< The source string is invalid or
+                                         empty. */
+} TokenizerInitError;
 
 /**
  * @brief Initializes the tokenizer with the given source code.
@@ -36,7 +41,7 @@ typedef struct {
  * This function sets up the tokenizer to start processing the provided source
  * code. It sets the initial position to the beginning of the source.
  */
-TokenizerError init_tokenizer(Tokenizer *tokenizer, const char *source);
+TokenizerInitError init_tokenizer(Tokenizer *tokenizer, const char *source);
 
 /**
  * @brief Returns the next token from the source code.

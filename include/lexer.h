@@ -32,14 +32,6 @@ typedef enum {
   TOKEN_UNKNOWN /**< Unrecognized tokens. */
 } TokenType;
 
-typedef enum {
-  LEXER_OK,                    /**< Initialization successful */
-  LEXER_ERR_NULL_PTR,          /**< NULL pointer passed to the function */
-  LEXER_ERR_MEMORY_ALLOCATION, /**< Initialization of lexer coudn't allocate
-                                  memory correctly*/
-  LEXER_ERR_TOKENIZER,         /**< Initialization of tokenizer unsuccessful */
-} LexerError;
-
 /**
  * @struct Token
  * @brief Represents a single token identified by the lexer.
@@ -76,6 +68,17 @@ typedef struct {
 } Lexer;
 
 /**
+ * @brief Enum representing possible errors during lexer initialization.
+ */
+typedef enum {
+  LEXER_INIT_OK = 0,         /**< Initialization successful. */
+  LEXER_INIT_ERROR_NULL_PTR, /**< A NULL pointer was passed to the function. */
+  LEXER_INIT_ERROR_MEMORY_ALLOCATION, /**< Memory allocation failed during
+                                         initialization. */
+  LEXER_INIT_ERROR_TOKENIZER          /**< Tokenizer initialization failed. */
+} LexerInitError;
+
+/**
  * @brief Initializes the lexer with the given source code.
  *
  * This function sets up the lexer to process the specified JavaScript source
@@ -85,7 +88,7 @@ typedef struct {
  * @param lexer A pointer to the Lexer structure to initialize.
  * @param source The JavaScript source code to be analyzed.
  */
-LexerError init_lexer(Lexer *lexer, const char *source);
+LexerInitError init_lexer(Lexer *lexer, const char *source);
 
 /**
  * Frees the memory allocated for the Lexer and its associated Tokenizer.

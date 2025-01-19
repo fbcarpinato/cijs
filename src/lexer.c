@@ -9,28 +9,27 @@
  *
  * @param lexer A pointer to the Lexer structure to initialize.
  * @param source The JavaScript source code to tokenize. Must not be NULL.
- * @return A LexerError code indicating the success or failure of
+ * @return A LexerInitError code indicating the success or failure of
  * initialization.
  */
-LexerError init_lexer(Lexer *lexer, const char *source) {
+LexerInitError init_lexer(Lexer *lexer, const char *source) {
   if (!lexer) {
-    return LEXER_ERR_NULL_PTR;
+    return LEXER_INIT_ERROR_NULL_PTR;
   }
 
   Tokenizer *tokenizer = (Tokenizer *)malloc(sizeof(Tokenizer));
   if (!tokenizer) {
-    return LEXER_ERR_MEMORY_ALLOCATION;
+    return LEXER_INIT_ERROR_MEMORY_ALLOCATION;
   }
 
-  TokenizerError tokenizer_err = init_tokenizer(tokenizer, source);
-  if (tokenizer_err != TOKENIZER_OK) {
+  if (init_tokenizer(tokenizer, source) != TOKENIZER_INIT_OK) {
     free(tokenizer);
-    return LEXER_ERR_TOKENIZER;
+    return LEXER_INIT_ERROR_TOKENIZER;
   }
 
   lexer->tokenizer = tokenizer;
 
-  return LEXER_OK;
+  return LEXER_INIT_OK;
 }
 
 /**

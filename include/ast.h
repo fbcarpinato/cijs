@@ -147,4 +147,37 @@ typedef struct {
   ASTNode root; /**< The root node of the AST. */
 } AST;
 
+/**
+ * @brief Enum representing possible errors during AST initialization.
+ */
+typedef enum {
+  AST_INIT_OK = 0,           /**< No error, initialization successful. */
+  AST_INIT_ERROR_NULL_PTR,   /**< The `ast` or `source` parameter was NULL. */
+  AST_INIT_ERROR_LEXER_FAIL, /**< Failed to initialize the lexer. */
+  AST_INIT_ERROR_MEMORY_FAIL /**< Memory allocation failure. */
+} ASTInitError;
+
+/**
+ * @brief Initializes an Abstract Syntax Tree (AST) with a lexer for the given
+ * source.
+ *
+ * This function creates a `Lexer` for the provided source code, associates it
+ * with the AST, and initializes the root node with default values.
+ *
+ * @param ast A pointer to the AST structure to initialize.
+ * @param source The source code to be tokenized by the lexer.
+ */
+ASTInitError init_ast(AST *ast, const char *source);
+
+/**
+ * @brief Frees resources used by the AST.
+ *
+ * Cleans up the AST structure, including the lexer and any dynamically
+ * allocated memory. Note: This assumes `create_lexer` dynamically allocates
+ * memory for the lexer.
+ *
+ * @param ast A pointer to the AST structure to free.
+ */
+void free_ast(AST *ast);
+
 #endif // CIJS_AST_H
