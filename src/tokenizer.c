@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -64,8 +65,13 @@ const char *next_token(Tokenizer *tokenizer) {
 
   int start_position = tokenizer->position;
 
-  while (!is_eof(current_tokenizer_char(tokenizer)) &&
-         !is_delimiter(current_tokenizer_char(tokenizer))) {
+  if (isalpha(current_tokenizer_char(tokenizer))) {
+    while (!is_eof(current_tokenizer_char(tokenizer)) &&
+           !is_delimiter(current_tokenizer_char(tokenizer)) &&
+           isalnum(current_tokenizer_char(tokenizer))) {
+      tokenizer->position++;
+    }
+  } else {
     tokenizer->position++;
   }
 
