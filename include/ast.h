@@ -1,6 +1,8 @@
 #ifndef CIJS_AST_H
 #define CIJS_AST_H
 
+#include <stddef.h>
+
 #import "lexer.h"
 
 /*
@@ -71,16 +73,18 @@ typedef enum {
    * - Boolean literals: `true`, `false`
    */
   NODE_LITERAL,
-
-  /**
-   * @brief Represents the end of the source file.
-   *
-   * This node is used as a sentinel to indicate that the parser has reached
-   * the end of the input. It typically does not have any children or additional
-   * data.
-   */
-  NODE_EOF
 } ASTNodeType;
+
+/**
+ * @brief Represents a variable declaration in an Abstract Syntax Tree (AST).
+ *
+ * The `name` field stores the variable name, and `value` stores the assigned
+ * expression. If the declaration does not include an assignment, `value` may be
+ * NULL.
+ */
+typedef struct {
+  char *name; /**< Name of the variable being declared. */
+} ASTVariableDeclarationNode;
 
 /**
  * @brief Represents an identifier in an Abstract Syntax Tree (AST).
@@ -111,6 +115,7 @@ typedef struct {
  * value.
  */
 typedef union {
+  ASTVariableDeclarationNode declaration;
   ASTIdentifierNode identifier; /**< Data for an identifier node. */
   ASTLiteralNode literal;       /**< Data for a literal node. */
 } ASTNodeData;
@@ -131,7 +136,8 @@ typedef struct ASTNode {
       type; /**< The type of the AST node (e.g., identifier, literal, etc.). */
   ASTNodeData data; /**< The content of the node (e.g., identifier name, literal
                        value). */
-  // struct ASTNode **children; // TODO: Implement as a dynamic array later.
+  struct ASTNode **children;
+  size_t children_count;
 } ASTNode;
 
 /**
@@ -170,14 +176,48 @@ typedef enum {
 ASTInitError init_ast(AST *ast, const char *source);
 
 /**
- * @brief Frees resources used by the AST.
+ * @brief frees resources used by the ast.
  *
- * Cleans up the AST structure, including the lexer and any dynamically
- * allocated memory. Note: This assumes `create_lexer` dynamically allocates
+ * cleans up the ast structure, including the lexer and any dynamically
+ * allocated memory. note: this assumes `create_lexer` dynamically allocates
  * memory for the lexer.
  *
- * @param ast A pointer to the AST structure to free.
+ * @param ast a pointer to the ast structure to free.
  */
 void free_ast(AST *ast);
+
+/**
+ * @brief Parses the program and constructs an AST.
+ *
+ * This function processes the given AST structure, parsing the input
+ * and returning the root node of the AST. The caller is responsible
+ * for freeing the returned ASTNode when it is no longer needed.
+ *
+ * @param ast A pointer to the AST structure used for parsing.
+ * @return A pointer to the root ASTNode of the parsed program.
+ */
+ASTNode *ast_parse_program(AST *ast);
+
+/**
+ * @brief Parses a statement and creates the corresponding AST node.
+ *
+ * This function takes a lexer token and creates an AST node based on the type
+ * of the token.
+ *
+ * @param ast A pointer to the AST structure.
+ * @param token The lexer token representing the statement.
+ * @return A pointer to the created ASTNode, or NULL if the statement could not
+ * be parsed.
+ */
+ASTNode *ast_parse_statement(AST *ast, LexerToken token);
+
+/**
+ * @brief Prints the contents of an AST node.
+ *
+ * This function prints the type and data of the given AST node.
+ *
+ * @param node The AST node to print.
+ */
+void ast_node_print(ASTNode *node);
 
 #endif // CIJS_AST_H

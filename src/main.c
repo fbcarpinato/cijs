@@ -40,6 +40,10 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
+  ASTNode *program = ast_parse_program(&ast);
+
+  ast_node_print(program);
+
   free_ast(&ast);
 
   return EXIT_SUCCESS;
